@@ -1,7 +1,7 @@
 {
 	"info": {
 		"name": "neopixel-nodejs",
-		"_postman_id": "01d202af-0079-0443-2d1d-39e3fd5d8361",
+		"_postman_id": "bb27e9bb-aa8d-aa29-b8ca-8e8f624de19b",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -31,8 +31,7 @@
 						"arduino",
 						"move"
 					]
-				},
-				"description": ""
+				}
 			},
 			"response": []
 		},
@@ -61,8 +60,7 @@
 						"arduino",
 						"fade"
 					]
-				},
-				"description": ""
+				}
 			},
 			"response": []
 		},
@@ -78,7 +76,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"com\":\"CO345M5\", \"baud\":128000}"
+					"raw": "{\"com\":\"COM5\", \"baud\":128000}"
 				},
 				"url": {
 					"raw": "http://localhost:3000/arduino/init",
@@ -91,8 +89,36 @@
 						"arduino",
 						"init"
 					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/arduino/defaults",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"offset\":144, \"maxleds\":288}"
 				},
-				"description": ""
+				"url": {
+					"raw": "http://localhost:3000/arduino/defaults",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"arduino",
+						"defaults"
+					]
+				}
 			},
 			"response": []
 		},
@@ -121,8 +147,7 @@
 						"arduino",
 						"rgb"
 					]
-				},
-				"description": ""
+				}
 			},
 			"response": []
 		},
@@ -131,7 +156,10 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
 					"raw": "http://localhost:3000/arduino/brightness/30",
 					"protocol": "http",
@@ -144,8 +172,7 @@
 						"brightness",
 						"30"
 					]
-				},
-				"description": ""
+				}
 			},
 			"response": []
 		}

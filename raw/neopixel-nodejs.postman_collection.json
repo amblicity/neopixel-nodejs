@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "http://localhost:3000/arduino/move",
+			"name": "http://localhost:3000/arduino/fill",
 			"request": {
 				"method": "POST",
 				"header": [

@@ -75,7 +75,7 @@ class NeopixelHelper {
 
 	// USAGE: /arduino/move
 	// {"pixelFrom":{"start":5, "end":6}, "pixelTo":{"start":50, "end":51}, "fillBehind":true, "duration":2500 "color":{"r":100, "g":20, "b":0}}
-	public setMoving(req, res):any {
+	public setFill(req, res):any {
 		this.buffer[0] = NeopixelHelper.CMD_RGB;
 		this.buffer[3] = req.body.color.r; 
 		this.buffer[4] = req.body.color.g; 

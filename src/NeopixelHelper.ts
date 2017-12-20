@@ -18,10 +18,10 @@ class NeopixelHelper {
 	constructor() {
 		if(!NeopixelHelper.IS_DEBUG) return;
 
-		this.com = new SerialPort("COM5", {
+		this.com = new SerialPort("COM6", {
 		    baudRate: 128000,
 		    databits: 8, 
-		    parity: 'none'
+		    parity: 'none' 
 		});
 
 		this.com.on('error', function(e) {
@@ -34,12 +34,18 @@ class NeopixelHelper {
 	}
 	
 	public init(req, res):any { 
+		if(this.com) {
+			this.com.close(function (err) {
+   				console.log('port closed', err);
+			});
+		}
+
 		this.com = new SerialPort(req.body.com, {
 		    baudRate: req.body.baud,
 		    databits: 8, 
 		    parity: 'none'
 		});
-
+ 
 		this.com.on('error', function(e) {
 			return res.json({status:'notok', msg:e.message});
 		});
@@ -52,7 +58,6 @@ class NeopixelHelper {
 	// USAGE: /arduino/defaults
 	// {"offset":30, "maxleds":40}
 	public setDefaults(req, res):any {
-		console.log(req.body);
 		this.buffer[0] = NeopixelHelper.CMD_DEFAULTS;
 		this.buffer[1] = req.body.offset; // led-offset
 		this.buffer[2] = req.body.maxleds; // max leds

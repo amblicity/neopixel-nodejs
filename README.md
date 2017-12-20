@@ -14,7 +14,7 @@ Out of the box REST API to manipulate Adafruit Neopixels. Includes Arduino Sketc
 * Basic Error handling
 * Built with Node + Express + Typescript
 
-![alt text](http://blog.unreal-mobile.com/pub/neopixel-nodejs.jpg "neopixel-nodejs")
+![alt text](http://blog.unreal-mobile.com/pub/np-node.jpg "neopixel-nodejs")
 
 ## Usage 
 
@@ -27,7 +27,7 @@ Content-Type: application/json
 {"com":"COM5", "baud":128000}
 ```
 
-#### Fade between two colors 
+#### Fade between two colors over duration
 ```
 POST /arduino/fade 
 Host: localhost:3000
@@ -38,7 +38,7 @@ Content-Type: application/json
 
 ```
 
-#### Fill an area
+#### Fill an area over duration
 ```
 POST /arduino/fill 
 Host: localhost:3000
@@ -56,7 +56,7 @@ POST /arduino/rgb
 Host: localhost:3000
 Content-Type: application/json
 
-{"start":5, "end":15, "colors":{"r":60, "g":20, "b":0}}
+{"start":5, "end":15, "color":{"r":60, "g":20, "b":0}}
 ```
 
 

@@ -47,11 +47,11 @@ class NeopixelHelper {
 		});
  
 		this.com.on('error', function(e) {
-			return res.json({status:'notok', msg:e.message});
+			return {status:'notok', msg:e.message};
 		});
 		
 		this.com.on('open', function(e) {
-			return res.json({status:'ok'});
+			return {status:'ok'};
 		});
 	}
 
@@ -62,7 +62,7 @@ class NeopixelHelper {
 		this.buffer[1] = req.body.offset; // led-offset
 		this.buffer[2] = req.body.maxleds; // max leds
 
-		return res.json(this.fillBufferAndSend());
+		return this.fillBufferAndSend();
 	}
 
 	// USAGE: /arduino/rgb
@@ -75,7 +75,7 @@ class NeopixelHelper {
 		this.buffer[4] = req.body.color.g; 
 		this.buffer[5] = req.body.color.b;
 
-		return res.json(this.fillBufferAndSend()); 
+		return this.fillBufferAndSend(); 
 	}
 
 	// USAGE: /arduino/move
@@ -98,7 +98,7 @@ class NeopixelHelper {
 
 		tween.tween();
 		
-		return res.json({status:'ok'});	
+		return {status:'ok'};	
 	}
 
 	private processMovement(step, fillBehind):void {
@@ -138,7 +138,7 @@ class NeopixelHelper {
 		    }
 		}
 
-		return res.json({status:'ok'});	
+		return {status:'ok'};	
 	}
 
 	private processColor(color):void {
@@ -154,7 +154,7 @@ class NeopixelHelper {
 		this.buffer[0] = NeopixelHelper.CMD_BRIGHTNESS;
 		this.buffer[1] = req.params.brightness; 
 		
-		return res.json(this.fillBufferAndSend());
+		return this.fillBufferAndSend();
 	}
 
 	private fillBufferAndSend():any {

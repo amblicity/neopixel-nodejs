@@ -28,7 +28,7 @@ class SocketAPI {
 		}).listen(SocketAPI.PORT, SocketAPI.HOST);
 	}
 
-	private onSocketData(data):void {
+	private onSocketData(data:object):void {
 		let dataStr = data.toString();
 		let commandID;
 
@@ -41,11 +41,11 @@ class SocketAPI {
 		}		
 	}
 
-	private onSocketClosed(data):void {
+	private onSocketClosed():void {
 		console.log('socket closed');
 	}
 
-	private validateCommandID(id):boolean {
+	private validateCommandID(id:string):boolean {
 		for (let entry of SocketAPI.CMDS) {
 		    if(entry === id) return true;
 		}
@@ -53,7 +53,7 @@ class SocketAPI {
 		return false;
 	}
 
-	private runCommand(id) {
+	private runCommand(id:string):void {
 		this.jsonData['body'] = this.jsonData['data'];
 		delete this.jsonData['data'];
 

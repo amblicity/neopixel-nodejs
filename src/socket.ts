@@ -18,41 +18,36 @@ class SocketAPI {
 	private jsonData;
 	private arduino = new NeopixelHelper();
 
+	private server;
+
 	constructor() {
-		net.createServer(this.onClientConnected.bind(this)).listen(SocketAPI.PORT, SocketAPI.HOST);
-		console.log('Server listening on ' + SocketAPI.HOST +':'+ SocketAPI.PORT);
+		this.server = net.createServer((socket) => {
+			this.socket = socket;
+			socket.on('data', (data) => this.onSocketData(data));
+			socket.on('close', this.onSocketClosed);
+		}).listen(SocketAPI.PORT, SocketAPI.HOST);
 	}
 
-	private onClientConnected(sock) {
-		console.log("client connected");
-
-		this.socket = sock;
-		this.socket.on('data', this.onSocketData.bind(this));
-		this.socket.on('close', this.onSocketClosed);
-	}
-
-	// usage: {"cmd":"rgb", "data":{"start":80, "end":144, "color":{"r":0, "g":80, "b":0}}}
-	private onSocketData(data) {
+	private onSocketData(data):void {
 		let dataStr = data.toString();
 		let commandID;
 
 		try {
 			this.jsonData = JSON.parse(dataStr);
 			if(this.validateCommandID(this.jsonData.cmd)) this.runCommand(this.jsonData.cmd);
-				else this.returnError();
+				else this.returnError('invalid command id');
 		} catch(e) {
-			console.log("invalid json");
-			this.socket.write("invalid json");
+			this.returnError('invalid json');
 		}		
 	}
 
-	private onSocketClosed(data) {
+	private onSocketClosed(data):void {
 		console.log('socket closed');
 	}
 
-	private validateCommandID(id) {
-		for(var i=0; i<SocketAPI.CMDS.length; i++) {
-			if(SocketAPI.CMDS[i] === id) return true;
+	private validateCommandID(id):boolean {
+		for (let entry of SocketAPI.CMDS) {
+		    if(entry === id) return true;
 		}
 
 		return false;
@@ -78,15 +73,12 @@ class SocketAPI {
 			case SocketAPI.CMD_FADE:
 				this.arduino.setFading(this.jsonData, null);
 			break;
-
-			default:
-				this.returnError();
 		}
 
 	}
 
-	private returnError() {
-		this.socket.write("missing id or data")
+	private returnError(str:string):void {
+		this.socket.write(str);
 		throw new Error();
 	}
 }

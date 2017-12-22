@@ -1,6 +1,9 @@
 # neopixel-nodejs
 Out of the box REST API to manipulate Adafruit Neopixels. Includes Arduino Sketch.
 
+## Version 0.3.2
+* Alternatively can be used as a socket server instead of a REST API
+
 ## Version 0.2.3
 * Supports filling areas by providing four positions over a duration w/ rgb color
 

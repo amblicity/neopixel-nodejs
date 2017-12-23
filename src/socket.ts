@@ -14,11 +14,12 @@ class SocketAPI {
 	
 	static CMDS = [SocketAPI.CMD_INIT, SocketAPI.CMD_RGB, SocketAPI.CMD_FILL, SocketAPI.CMD_FADE, SocketAPI.CMD_BRIGHTNESS];
 
+	private server;
 	private socket;
 	private jsonData;
+	
 	private arduino = new NeopixelHelper();
 
-	private server;
 
 	constructor() {
 		this.server = net.createServer((socket) => {

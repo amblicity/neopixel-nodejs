@@ -1,11 +1,9 @@
 import express = require('express');
 import NeopixelHelper = require('./NeopixelHelper');
 import net = require('net');
+import * as dotenv from 'dotenv';
 
 class SocketAPI {
-	static HOST = '0.0.0.0';
-	static PORT = 6969;
-
 	static CMD_INIT = "init";
 	static CMD_RGB = "rgb";
 	static CMD_FILL = "fill";
@@ -17,16 +15,19 @@ class SocketAPI {
 	private server;
 	private socket;
 	private jsonData;
-	
+	private environment;
+
 	private arduino = new NeopixelHelper();
 
 
 	constructor() {
+		this.environment = dotenv.config().parsed;
+
 		this.server = net.createServer((socket) => {
 			this.socket = socket;
 			socket.on('data', (data) => this.onSocketData(data));
 			socket.on('close', this.onSocketClosed);
-		}).listen(SocketAPI.PORT, SocketAPI.HOST);
+		}).listen(this.environment.DEFAULT_SOCKET_API_PORT || 6969, this.environment.DEFAULT_SOCKET_API_HOST || "0.0.0.0");
 	}
 
 	private onSocketData(data:object):void {

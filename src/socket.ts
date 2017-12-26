@@ -60,19 +60,19 @@ class SocketAPI {
 
 		switch(id) {
 			case SocketAPI.CMD_INIT:
-				this.arduino.init(this.jsonData, null);
+				this.arduino.init(this.jsonData);
 			break;
 
 			case SocketAPI.CMD_RGB:
-				this.arduino.setRGB(this.jsonData, null);
+				this.arduino.setRGB(this.jsonData);
 			break;
 
 			case SocketAPI.CMD_FILL:
-				this.arduino.setFill(this.jsonData, null);
+				this.arduino.setFill(this.jsonData);
 			break;
 
 			case SocketAPI.CMD_FADE:
-				this.arduino.setFading(this.jsonData, null);
+				this.arduino.setFading(this.jsonData);
 			break;
 		}
 

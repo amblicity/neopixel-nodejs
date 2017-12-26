@@ -36,9 +36,9 @@ class NeopixelHelper {
 		});
 	}
 	
-	public init(req, res):any { 
-		this.com = new SerialPort(req.body.com, {
-		    baudRate: req.body.baud,
+	public init(data):object { 
+		this.com = new SerialPort(data.body.com, {
+		    baudRate: data.body.baud,
 		    databits: 8, 
 		    parity: 'none'
 		});
@@ -57,53 +57,53 @@ class NeopixelHelper {
 
 	// ROUTE: /arduino/defaults
 	// {"offset":30, "maxleds":40}
-	public setDefaults(req, res):any {
+	public setDefaults(data):object {
 		this.buffer[0] = NeopixelHelper.CMD_DEFAULTS;
-		this.buffer[1] = req.body.offset; 
-		this.buffer[2] = req.body.maxleds; 
+		this.buffer[1] = data.body.offset; 
+		this.buffer[2] = data.body.maxleds; 
 
 		return this.fillBufferAndSend();
 	}
 
 	// ROUTE: /arduino/rgb
 	// {"start":5, "end":15, "color":{"r":100, "g":20, "b":0}}
-	public setRGB(req, res):any {
+	public setRGB(data):object {
 		this.buffer[0] = NeopixelHelper.CMD_RGB;
-		this.buffer[1] = req.body.start; 
-		this.buffer[2] = req.body.end; 
-		this.buffer[3] = req.body.color.r; 
-		this.buffer[4] = req.body.color.g; 
-		this.buffer[5] = req.body.color.b;
+		this.buffer[1] = data.body.start; 
+		this.buffer[2] = data.body.end; 
+		this.buffer[3] = data.body.color.r; 
+		this.buffer[4] = data.body.color.g; 
+		this.buffer[5] = data.body.color.b;
 
 		return this.fillBufferAndSend(); 
 	}
 
 
 	// ROUTE: arduino/brightness/150
-	public setIlluminance(req, res):any {
+	public setIlluminance(data):object {
 		this.buffer[0] = NeopixelHelper.CMD_BRIGHTNESS;
-		this.buffer[1] = req.params.brightness; 
+		this.buffer[1] = data.params.brightness; 
 		
 		return this.fillBufferAndSend();
 	}
 
 	// ROUTE: /arduino/move
 	// {"pixelFrom":{"start":5, "end":6}, "pixelTo":{"start":50, "end":51}, "fillBehind":true, "duration":2500 "color":{"r":100, "g":20, "b":0}}
-	public setFill(req, res):any {
+	public setFill(data):object {
 		this.buffer[0] = NeopixelHelper.CMD_RGB;
-		this.buffer[3] = req.body.color.r; 
-		this.buffer[4] = req.body.color.g; 
-		this.buffer[5] = req.body.color.b;
+		this.buffer[3] = data.body.color.r; 
+		this.buffer[4] = data.body.color.g; 
+		this.buffer[5] = data.body.color.b;
 
 		const tween = new Tweenable(); 
 
 		// @TODO: add onFinished to return status to express
 		tween.setConfig({
-			from: { pixelStart: req.body.pixelFrom.start,  pixelEnd: req.body.pixelFrom.end  },
-			to: { pixelStart: req.body.pixelTo.start,  pixelEnd: req.body.pixelTo.end },
-			duration: req.body.duration > 650 ? req.body.duration : 650,
+			from: { pixelStart: data.body.pixelFrom.start,  pixelEnd: data.body.pixelFrom.end  },
+			to: { pixelStart: data.body.pixelTo.start,  pixelEnd: data.body.pixelTo.end },
+			duration: data.body.duration > 650 ? data.body.duration : 650,
 			easing: 'easeOutQuad',
-			step: state => this.processMovement(state, req.body.pixelTo.fillBehind)
+			step: state => this.processMovement(state, data.body.pixelTo.fillBehind)
 		});
 
 		tween.tween();
@@ -120,10 +120,10 @@ class NeopixelHelper {
 
 	// ROUTE: /arduino/fade
 	// {"start":0, "end":60, "duration":2500, "easing":"cubicInOut", colorFrom":{"r":0, "g":0, "b":50}, "colorTo":{"r":50, "g":0, "b":0}}
-	public setFading(req, res):any {
+	public setFading(data):object {
 		this.buffer[0] = NeopixelHelper.CMD_RGB;
-		this.buffer[1] = req.body.start; 
-		this.buffer[2] = req.body.end; 
+		this.buffer[1] = data.body.start; 
+		this.buffer[2] = data.body.end; 
 
 		function componentToHex(c) {
 		    var hex = c.toString(16);
@@ -136,10 +136,10 @@ class NeopixelHelper {
 
 		// @TODO: add onFinished to return status to express
 		let tween = new ColorTween(
-			rgbToHex(req.body.colorFrom.r, req.body.colorFrom.g, req.body.colorFrom.b), 
-			rgbToHex(req.body.colorTo.r, req.body.colorTo.g, req.body.colorTo.b))
-			.easing(req.body.easing || 'cubicInOut')
-			.duration(req.body.duration < 650 ? 650 : req.body.duration)
+			rgbToHex(data.body.colorFrom.r, data.body.colorFrom.g, data.body.colorFrom.b), 
+			rgbToHex(data.body.colorTo.r, data.body.colorTo.g, data.body.colorTo.b))
+			.easing(data.body.easing || 'cubicInOut')
+			.duration(data.body.duration < 650 ? 650 : data.body.duration)
 			.onUpdate(this.processColor.bind(this))
 			.start(animate);
 
@@ -160,20 +160,20 @@ class NeopixelHelper {
 		this.fillBufferAndSend();
 	}
 
-	protected fillBufferAndSend():any {
+	protected fillBufferAndSend():object {
 		try {
 			for(var i = this.buffer.length; i < NeopixelHelper.COMMAND_LENGTH; i++) {
 				this.buffer[i] = 0;
 			}
 		
 			this.com.write(this.buffer, (cb) => {
+				// @TODO: fix response timing to express
 				console.log('written to arduino');
 			});
 		} catch(e) {
 			return {status:'notok', msg:e.message};
 		}
 
-		console.log('returning status');
 		return {status:'ok', sent:this.buffer};
 	}
 }

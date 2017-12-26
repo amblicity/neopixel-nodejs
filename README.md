@@ -1,6 +1,9 @@
 # neopixel-nodejs
 Out of the box REST API to manipulate Adafruit Neopixels. Includes Arduino Sketch.
 
+## Version 0.3.5
+* Added .env file to allow default initialisation of Arduino
+
 ## Version 0.3.2
 * Alternatively can be used as a socket server instead of a REST API
 

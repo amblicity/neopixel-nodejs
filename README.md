@@ -24,7 +24,7 @@ Out of the box REST API to manipulate Adafruit Neopixels. Includes Arduino Sketc
 
 ## Usage 
 
-#### Initialize your Arduino
+#### Initialize your Arduino, unless you're using AUTO_INIT
 ```
 POST /arduino/init
 Host: localhost:3000

@@ -32,12 +32,8 @@ class NeopixelHelper {
 		});
 		
 		this.com.on('open', function(e) {
-			console.log("connected");
+			console.log("SerialPort: Connected");
 		});
-	}
-
-	public async testAsync(req, res) {
-		
 	}
 	
 	public init(req, res):any { 
@@ -82,7 +78,7 @@ class NeopixelHelper {
 		return this.fillBufferAndSend(); 
 	}
 
-	
+
 	// ROUTE: arduino/brightness/150
 	public setIlluminance(req, res):any {
 		this.buffer[0] = NeopixelHelper.CMD_BRIGHTNESS;
@@ -101,7 +97,7 @@ class NeopixelHelper {
 
 		const tween = new Tweenable(); 
 
-		// @todo: add onFinished to return status to express
+		// @TODO: add onFinished to return status to express
 		tween.setConfig({
 			from: { pixelStart: req.body.pixelFrom.start,  pixelEnd: req.body.pixelFrom.end  },
 			to: { pixelStart: req.body.pixelTo.start,  pixelEnd: req.body.pixelTo.end },
@@ -138,7 +134,7 @@ class NeopixelHelper {
 		    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 		}
 
-		// @todo: add onFinished to return status to express
+		// @TODO: add onFinished to return status to express
 		let tween = new ColorTween(
 			rgbToHex(req.body.colorFrom.r, req.body.colorFrom.g, req.body.colorFrom.b), 
 			rgbToHex(req.body.colorTo.r, req.body.colorTo.g, req.body.colorTo.b))

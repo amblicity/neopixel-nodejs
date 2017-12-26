@@ -1,7 +1,6 @@
 import express = require('express');
 import NeopixelHelper = require('./NeopixelHelper');
-
-const bodyParser = require('body-parser');
+import bodyParser = require('body-parser');
 
 const app = express();
 const arduino = new NeopixelHelper();
